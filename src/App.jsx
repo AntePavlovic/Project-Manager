@@ -1,14 +1,19 @@
 import React from 'react';
-import './styles/App.css';
-import ExampleComponent from './components/ExampleComponent';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import UserPage from './components/UserPage';
+import AdminPage from './components/AdminPage';
+import ProfesorPage from './components/ProfesorPage';
 
-const App = () => {
-    return (
-        <div className="App">
-            <h1>Welcome to My React App</h1>
-            <ExampleComponent />
-        </div>
-    );
-};
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<UserPage />} />
+        <Route path="/admin" element={<AdminPage />} />
+        <Route path="/ProfesorPage" element={<ProfesorPage />} />
+      </Routes>
+    </Router>
+  );
+}
 
 export default App;
