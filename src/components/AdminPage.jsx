@@ -1,33 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import NavBar from './NavBar';
 import { useNavigate } from 'react-router-dom';
-
-const professors = [
-  {
-    id: 1,
-    name: 'Marko Marković',
-    title: 'doc. dr. sc. Informatika',
-    image: 'https://via.placeholder.com/100',
-    slots: '0/3',
-    topics: ['uvod u React', 'komponente i props', 'state i lifecycle', 'hooks', 'routing'],
-  },
-  {
-    id: 2,
-    name: 'Ana Anić',
-    title: 'izv. prof. dr. sc. Dizajn',
-    image: 'https://via.placeholder.com/100',
-    slots: '1/3',
-    topics: ['osnove CSS-a', 'flexbox i grid', 'responsive dizajn', 'animacije', 'sass/scss'],
-  },
-  {
-    id: 3,
-    name: ' Ivan Ivić',
-    title: 'prof. dr. sc. Baze podataka',
-    image: 'https://via.placeholder.com/100',
-    slots: '2/3',
-    topics: ['uvod u baze podataka', 'SQL upiti', 'relacijski modeli', 'normalizacija', 'indexiranje'],
-  },
-];
+import { supabase } from '../supabaseClient'; 
 
 const styles = `
 .userpage-container {
@@ -82,9 +56,15 @@ const styles = `
   max-height: 100px;
   border-radius: 50%;
   margin-top: 24px;
-  object-fit: cover;
   background: #eee;
-  transition: width 1.2s, height 1.2s;
+  display: flex;
+  align-items: center; /* Vertikalno centriranje */
+  justify-content: center; /* Horizontalno centriranje */
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1976d2;
+  text-transform: uppercase;
+  user-select: none;
 }
 .prof-modal.expanded .prof-image {
   width: 150px;
@@ -290,12 +270,13 @@ const styles = `
 `;
 
 const AdminPage = () => {
+  const [professors, setProfessors] = useState([]); // Dinamički podaci
   const [expandedId, setExpandedId] = useState(null);
   const [showConfirm, setShowConfirm] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
   const navigate = useNavigate();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!document.getElementById('userpage-styles')) {
       const style = document.createElement('style');
       style.id = 'userpage-styles';
@@ -304,11 +285,58 @@ const AdminPage = () => {
     }
   }, []);
 
-  // Dummy handler for deleting professor
-  const handleDelete = () => {
+  // Dohvaćanje podataka iz Supabase baze
+  useEffect(() => {
+    const fetchProfessors = async () => {
+      const { data: professorsData, error: professorsError } = await supabase
+        .from('profesori')
+        .select('id, ime, prezime, email, titula');
+
+      if (professorsError) {
+        console.error('Greška pri dohvaćanju profesora:', professorsError);
+        return;
+      }
+
+      // Dohvaćanje broja tema za svakog profesora
+      const { data: topicsData, error: topicsError } = await supabase
+        .from('teme')
+        .select('profesor_id, zauzeta');
+
+      if (topicsError) {
+        console.error('Greška pri dohvaćanju tema:', topicsError);
+        return;
+      }
+
+      // Mapiranje broja tema i slobodnih tema na profesore
+      const professorsWithTopics = professorsData.map((prof) => {
+        const professorTopics = topicsData.filter((topic) => topic.profesor_id === prof.id);
+        const totalTopics = professorTopics.length;
+        const freeTopics = professorTopics.filter((topic) => !topic.zauzeta).length;
+
+        return {
+          ...prof,
+          totalTopics,
+          freeTopics,
+        };
+      });
+
+      console.log('Dohvaćeni profesori s temama:', professorsWithTopics); // Debug ispis
+      setProfessors(professorsWithTopics);
+    };
+
+    fetchProfessors();
+  }, []);
+
+  // Brisanje profesora
+  const handleDelete = async () => {
     setShowConfirm(false);
-    // Ovdje bi išla logika za brisanje profesora po deleteId
-    alert('Profesor obrisan!');
+    const { error } = await supabase.from('profesori').delete().eq('id', deleteId); // Promijenjeno u 'profesori'
+    if (error) {
+      console.error('Greška pri brisanju profesora:', error);
+    } else {
+      setProfessors(professors.filter((prof) => prof.id !== deleteId));
+      alert('Profesor obrisan!');
+    }
   };
 
   return (
@@ -323,86 +351,51 @@ const AdminPage = () => {
           </div>
         </div>
         {/* Svi profesori */}
-        {professors.map((prof) => (
-          <div
-            key={prof.id}
-            className={`prof-modal${expandedId === prof.id ? ' expanded' : ''}`}
-            onClick={() => setExpandedId(expandedId === prof.id ? null : prof.id)}
-          >
-            {/* X za zatvaranje/brisanje */}
-            <button
-              className="close-x"
-              onClick={e => {
-                e.stopPropagation();
-                setDeleteId(prof.id);
-                setShowConfirm(true);
-              }}
-              title="Obriši profesora"
-            >
-              ×
-            </button>
+        {professors.length > 0 ? (
+          professors.map((prof) => (
             <div
-              className="prof-image"
-              style={{
-                width: expandedId === prof.id ? 150 : 100,
-                height: expandedId === prof.id ? 150 : 100,
-                minWidth: expandedId === prof.id ? 150 : 100,
-                minHeight: expandedId === prof.id ? 150 : 100,
-                maxWidth: expandedId === prof.id ? 150 : 100,
-                maxHeight: expandedId === prof.id ? 150 : 100,
-                borderRadius: '50%',
-                marginTop: 24,
-                background: '#eee',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: expandedId === prof.id ? '2.2rem' : '1.5rem',
-                fontWeight: 700,
-                color: '#1976d2',
-                textTransform: 'uppercase',
-                userSelect: 'none',
-                transition: 'width 1.2s, height 1.2s',
-              }}
+              key={prof.id}
+              className={`prof-modal${expandedId === prof.id ? ' expanded' : ''}`}
+              onClick={() => setExpandedId(expandedId === prof.id ? null : prof.id)}
             >
-              {prof.name.trim().split(/\s+/).map(word => word[0]).join('')}
-            </div>
-            <h2 className="prof-name">{prof.name}</h2>
-            <div className="prof-title">
-              {expandedId === prof.id ? prof.title : ''}
-            </div>
-            <span className="prof-slots">{prof.slots}</span>
-            <button
-              className="pogledaj-btn"
-              onClick={e => {
-                e.stopPropagation();
-                navigate('/ProfesorPage', { state: { profesor: prof } });
-              }}
-            >
-              Pogledaj
-            </button>
-            {expandedId === prof.id && (
-              <div className="topics-preview">
-                <div className="topics-preview-title">Pregled tema:</div>
-                <ul className="topics-list">
-                  {prof.topics.slice(0, 3).map((topic, idx) => (
-                    <li key={idx}>{topic}</li>
-                  ))}
-                </ul>
+              <div className="prof-image">
+                {prof.ime[0]}{prof.prezime[0]} {/* Generiranje inicijala */}
               </div>
-            )}
-          </div>
-        ))}
+              <h2 className="prof-name">{prof.ime} {prof.prezime}</h2>
+              <div className="prof-title">Titula: {prof.titula}</div>
+              <div className="prof-title">Email: {prof.email}</div>
+              <span className="prof-slots">
+                {prof.freeTopics} / {prof.totalTopics}
+              </span>
+              <button
+                className="pogledaj-btn"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate('/ProfesorPage', { state: { profesor: prof } });
+                }}
+              >
+                Pogledaj
+              </button>
+            </div>
+          ))
+        ) : (
+          <p>Nema dostupnih profesora.</p>
+        )}
       </div>
       {/* Custom confirm modal */}
       {showConfirm && (
         <div className="confirm-modal-bg" onClick={() => setShowConfirm(false)}>
-          <div className="confirm-modal" onClick={e => e.stopPropagation()}>
+          <div className="confirm-modal" onClick={(e) => e.stopPropagation()}>
             <div className="confirm-modal-title">
               Jeste li sigurni da želite obrisati ovog profesora?
             </div>
             <div className="confirm-modal-btns">
-              <button className="confirm-btn" onClick={handleDelete}>Da</button>
-              <button className="cancel-btn" onClick={() => setShowConfirm(false)}>Ne</button>
+              <button className="confirm-btn" onClick={handleDelete}>
+                Da
+              </button>
+              <button className="cancel-btn" onClick={() => setShowConfirm(false)}>
+                Ne
+              </button>
             </div>
           </div>
         </div>

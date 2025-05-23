@@ -1,33 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import NavBar from './NavBar';
 import { useNavigate } from 'react-router-dom';
-
-const professors = [
-  {
-    id: 1,
-    name: 'Marko Marković',
-    title: 'doc. dr. sc. Informatika',
-    image: 'https://via.placeholder.com/100',
-    slots: '0/3',
-    topics: ['uvod u React', 'komponente i props', 'state i lifecycle', 'hooks', 'routing'],
-  },
-  {
-    id: 2,
-    name: 'Ana Anić',
-    title: 'izv. prof. dr. sc. Dizajn',
-    image: 'https://via.placeholder.com/100',
-    slots: '1/3',
-    topics: ['osnove CSS-a', 'flexbox i grid', 'responsive dizajn', 'animacije', 'sass/scss'],
-  },
-  {
-    id: 3,
-    name: ' Ivan Ivić',
-    title: 'prof. dr. sc. Baze podataka',
-    image: 'https://via.placeholder.com/100',
-    slots: '2/3',
-    topics: ['uvod u baze podataka', 'SQL upiti', 'relacijski modeli', 'normalizacija', 'indexiranje'],
-  },
-];
+import { supabase } from '../supabaseClient';
 
 const styles = `
 .userpage-container {
@@ -71,7 +45,7 @@ const styles = `
   max-height: 420px;
   z-index: 10;
   box-shadow: 0 12px 48px rgba(0,0,0,0.22);
-  transform: scale(1.12) , transition: 1s;
+  transform: scale(1.12);
 }
 .prof-image {
   width: 100px;
@@ -84,7 +58,14 @@ const styles = `
   margin-top: 24px;
   object-fit: cover;
   background: #eee;
-  transition: width 1.2s, height 1.2s; /* usporena animacija */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1976d2;
+  text-transform: uppercase;
+  user-select: none;
 }
 .prof-modal.expanded .prof-image {
   width: 150px;
@@ -181,10 +162,11 @@ const styles = `
 `;
 
 const UserPage = () => {
+  const [professors, setProfessors] = useState([]);
   const [expandedId, setExpandedId] = useState(null);
   const navigate = useNavigate();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!document.getElementById('userpage-styles')) {
       const style = document.createElement('style');
       style.id = 'userpage-styles';
@@ -193,68 +175,73 @@ const UserPage = () => {
     }
   }, []);
 
+  useEffect(() => {
+    const fetchProfessors = async () => {
+      const { data: professorsData, error: professorsError } = await supabase
+        .from('profesori')
+        .select('id, ime, prezime, titula, email');
+
+      if (professorsError) {
+        console.error('Greška pri dohvaćanju profesora:', professorsError);
+        return;
+      }
+
+      const { data: topicsData, error: topicsError } = await supabase
+        .from('teme')
+        .select('profesor_id, zauzeta');
+
+      if (topicsError) {
+        console.error('Greška pri dohvaćanju tema:', topicsError);
+        return;
+      }
+
+      const professorsWithTopics = professorsData.map((prof) => {
+        const professorTopics = topicsData.filter((topic) => topic.profesor_id === prof.id);
+        const totalTopics = professorTopics.length;
+        const freeTopics = professorTopics.filter((topic) => !topic.zauzeta).length;
+
+        return {
+          ...prof,
+          totalTopics,
+          freeTopics,
+        };
+      });
+
+      setProfessors(professorsWithTopics);
+    };
+
+    fetchProfessors();
+  }, []);
+
   return (
     <>
       <NavBar />
-     <div className="userpage-container">
+      <div className="userpage-container">
         {professors.map((prof) => (
           <div
             key={prof.id}
             className={`prof-modal${expandedId === prof.id ? ' expanded' : ''}`}
             onClick={() => setExpandedId(expandedId === prof.id ? null : prof.id)}
           >
-            <div
-              className="prof-image"
-              style={{
-                width: expandedId === prof.id ? 150 : 100,
-                height: expandedId === prof.id ? 150 : 100,
-                minWidth: expandedId === prof.id ? 150 : 100,
-                minHeight: expandedId === prof.id ? 150 : 100,
-                maxWidth: expandedId === prof.id ? 150 : 100,
-                maxHeight: expandedId === prof.id ? 150 : 100,
-                borderRadius: '50%',
-                marginTop: 24,
-                background: '#eee',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: expandedId === prof.id ? '2.2rem' : '1.5rem',
-                fontWeight: 700,
-                color: '#1976d2',
-                textTransform: 'uppercase',
-                userSelect: 'none',
-                transition: 'width 1.2s, height 1.2s',
-              }}
-            >
-              {prof.name
-                .split(' ')
-                .map(word => word[0])
-                .join('')}
+            <div className="prof-image">
+              {prof.ime[0]}{prof.prezime[0]}
             </div>
-            <h2 className="prof-name">{prof.name}</h2>
+            <h2 className="prof-name">{prof.ime} {prof.prezime}</h2>
             <div className="prof-title">
-              {expandedId === prof.id ? prof.title : ''}
+              {expandedId === prof.id ? prof.titula : ''}
             </div>
-            <span className="prof-slots">{prof.slots}</span>
-             <button
+            <span className="prof-slots">
+            {prof.freeTopics} / {prof.totalTopics}
+            </span>
+            <button
               className="pogledaj-btn"
-              onClick={e => {
+              onClick={(e) => {
                 e.stopPropagation();
                 navigate('/ProfesorPage', { state: { profesor: prof } });
               }}
             >
               Pogledaj
             </button>
-            {expandedId === prof.id && (
-              <div className="topics-preview">
-                <div className="topics-preview-title">Pregled tema:</div>
-                <ul className="topics-list">
-                  {prof.topics.slice(0, 3).map((topic, idx) => (
-                    <li key={idx}>{topic}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
           </div>
         ))}
       </div>
