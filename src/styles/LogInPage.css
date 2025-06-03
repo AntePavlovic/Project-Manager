@@ -1,0 +1,77 @@
+/* Modernizirani stilovi za LogInPage */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+   background-color: #f5f5f5;
+}
+
+.login-form {
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  width: 350px;
+  text-align: center;
+}
+
+.login-form h2 {
+  margin-bottom: 20px;
+  color: #1976d2;
+  font-size: 24px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+}
+
+.form-group input {
+  
+    padding: 10px;
+    width: 90%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.forgot-password,
+.register-link {
+  margin-top: 10px;
+}
+
+.forgot-password a,
+.register-link a {
+  color: #1976d2;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.forgot-password a:hover,
+.register-link a:hover {
+  text-decoration: underline;
+}
+
+.login-button {
+  background-color: #1976d2;
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.login-button:hover {
+  background-color: #0056b3;
+}

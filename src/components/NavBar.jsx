@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '../supabaseClient';
 
 const navBarStyles = `
 .custom-navbar {
@@ -88,12 +89,30 @@ const navBarStyles = `
   transition: left 0.2s, width 0.2s;
   z-index: 101;
 }
+.custom-navbar .logout-button {
+  color: #002147;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 4px;
+  background: #f2f2f2;
+  transition: background 0.2s;
+  padding: 8px 16px;
+  display: inline-block;
+  border: none;
+  cursor: pointer;
+}
+
+.custom-navbar .logout-button:hover {
+  background: #1976d2;
+  color: #fff;
+}
 `;
 
 const NavBar = () => {
   const [active, setActive] = useState('odabir-teme');
   const navRef = useRef(null);
   const [highlightStyle, setHighlightStyle] = useState({ left: 0, width: 0 });
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -114,6 +133,21 @@ const NavBar = () => {
       }
     }
   }, [active]);
+
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      const { data } = await supabase.auth.getSession();
+      setIsLoggedIn(!!data.session);
+    };
+    checkLoginStatus();
+  }, []);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    alert('Odjava uspješna!');
+    setIsLoggedIn(false);
+    navigate('/'); // Navigacija na početnu stranicu
+  };
 
   return (
     <nav className="custom-navbar">
@@ -165,9 +199,15 @@ const NavBar = () => {
         />
       </ul>
       <div className="usermenu-container">
-        <span className="login">
-          <a href="https://eucenje.sum.ba/moodle/login/index.php">Prijava</a>
-        </span>
+        {isLoggedIn ? (
+          <button onClick={handleLogout} className="logout-button">
+            Odjavi se
+          </button>
+        ) : (
+          <span className="login">
+            <a href="https://eucenje.sum.ba/moodle/login/index.php">Prijava</a>
+          </span>
+        )}
       </div>
     </nav>
   );
