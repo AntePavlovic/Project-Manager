@@ -1,4 +1,5 @@
 import React from 'react';
+import { supabase } from "./supabaseClient";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import UserPage from './components/UserPage';
 import AdminPage from './components/AdminPage';
