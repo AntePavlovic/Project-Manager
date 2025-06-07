@@ -52,13 +52,14 @@ const DodajKorisnike = ({ userRole }) => {
   };
 
   const handleAddStudent = async () => {
-    const { data, error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.admin.createUser({
       email: studentData.email,
       password: studentData.password,
     });
 
     if (error) {
       console.error('Greška pri kreiranju računa:', error);
+      alert('Greška pri kreiranju računa.');
       return;
     }
 
@@ -75,6 +76,7 @@ const DodajKorisnike = ({ userRole }) => {
 
     if (dbError) {
       console.error('Greška pri dodavanju studenta u bazu:', dbError);
+      alert('Greška pri dodavanju studenta u bazu.');
       return;
     }
 
@@ -89,6 +91,7 @@ const DodajKorisnike = ({ userRole }) => {
 
     if (korisnikError) {
       console.error('Greška pri dodavanju u korisnici:', korisnikError);
+      alert('Greška pri dodavanju u korisnici.');
     } else {
       alert('Student uspješno dodan!');
       setShowStudentModal(false);
@@ -96,13 +99,14 @@ const DodajKorisnike = ({ userRole }) => {
   };
 
   const handleAddProfessor = async () => {
-    const { data, error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.admin.createUser({
       email: professorData.email,
       password: professorData.password,
     });
 
     if (error) {
       console.error('Greška pri kreiranju računa:', error);
+      alert('Greška pri kreiranju računa.');
       return;
     }
 
@@ -120,6 +124,7 @@ const DodajKorisnike = ({ userRole }) => {
 
     if (dbError) {
       console.error('Greška pri dodavanju profesora u bazu:', dbError);
+      alert('Greška pri dodavanju profesora u bazu.');
       return;
     }
 
@@ -134,6 +139,7 @@ const DodajKorisnike = ({ userRole }) => {
 
     if (korisnikError) {
       console.error('Greška pri dodavanju u korisnici:', korisnikError);
+      alert('Greška pri dodavanju u korisnici.');
     } else {
       alert('Profesor uspješno dodan!');
       setShowProfessorModal(false);

@@ -90,14 +90,20 @@ const DodajProjekt = ({ userRole, profesorId }) => {
   };
 
   const handleAddProjekt = async () => {
-    const datotekaUrl = await handleFileUpload(); // Upload datoteke i dohvaćanje URL-a
+    let datotekaUrl = null;
 
-    if (!datotekaUrl) {
-      console.error('URL datoteke nije dostupan.');
-      alert('Greška: URL datoteke nije dostupan.');
-      return;
+    // Ako je datoteka odabrana, pokušavamo je uploadati
+    if (datoteka) {
+      datotekaUrl = await handleFileUpload(); // Upload datoteke i dohvaćanje URL-a
+
+      if (!datotekaUrl) {
+        console.error('Greška pri uploadu datoteke.');
+        alert('Greška pri uploadu datoteke.');
+        return;
+      }
     }
 
+    // Dodavanje projekta u bazu
     const { error } = await supabase
       .from('teme')
       .insert({
@@ -107,7 +113,7 @@ const DodajProjekt = ({ userRole, profesorId }) => {
         smjer_id: projektData.smjer_id,
         profesor_id: projektData.profesor_id,
         max_broj_studenata: projektData.max_broj_studenata,
-        datoteka_url: datotekaUrl, // Spremanje URL-a datoteke
+        datoteka_url: datotekaUrl, // Spremanje URL-a datoteke ili null
       });
 
     if (error) {
