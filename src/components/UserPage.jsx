@@ -128,51 +128,44 @@ const styles = `
 .pogledaj-btn:hover {
   background: #1251a3;
 }
-.topics-preview {
-  margin-top: 8px;
-  margin-bottom: 10px;
-  width: 90%;
-  font-size: 0.98rem;
-  color: #444;
-  text-align: left;
-  font-family: 'Segoe UI', Arial, sans-serif;
-  letter-spacing: 0.01em;
-}
-.topics-preview-title {
-  font-size: 0.95rem;
-  color: #1976d2;
-  font-weight: 600;
-  margin-bottom: 4px;
-  margin-top: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-.topics-list {
-  margin: 0;
-  padding-left: 32px;
-}
-.topics-list li {
-  font-size: 0.97rem;
-  color: #333;
-  margin-bottom: 2px;
-  text-transform: lowercase;
-  list-style: number;
-  right: 18px;
-}
 `;
 
 const UserPage = () => {
+  const [userRole, setUserRole] = useState(null); // Dodajemo state za ulogu korisnika
   const [professors, setProfessors] = useState([]);
   const [expandedId, setExpandedId] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!document.getElementById('userpage-styles')) {
-      const style = document.createElement('style');
-      style.id = 'userpage-styles';
-      style.innerHTML = styles;
-      document.head.appendChild(style);
-    }
+    const fetchUserRole = async () => {
+      const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+
+      if (sessionError || !sessionData.session) {
+        console.error('Greška pri dohvaćanju sesije korisnika:', sessionError);
+        return;
+      }
+
+      const userEmail = sessionData.session.user.email; // Dohvaćamo email korisnika iz sesije
+
+      const { data: userData, error: userError } = await supabase
+        .from('korisnici')
+        .select('uloga')
+        .eq('email', userEmail);
+
+      if (userError) {
+        console.error('Greška pri dohvaćanju uloge korisnika:', userError);
+        return;
+      }
+
+      if (!userData || userData.length === 0) {
+        console.error('Korisnik nije pronađen u tablici korisnici.');
+        return;
+      }
+
+      setUserRole(userData[0].uloga); // Postavljamo ulogu korisnika
+    };
+
+    fetchUserRole();
   }, []);
 
   useEffect(() => {
@@ -215,8 +208,12 @@ const UserPage = () => {
 
   return (
     <>
-      <NavBar />
+      <NavBar userRole={userRole} /> {/* Prosljeđujemo ulogu korisnika */}
       <div className="userpage-container">
+        <h1>Dobrodošli!</h1>
+        {userRole === 'student' && <p>Ovo je stranica za studente.</p>}
+        {userRole === 'profesor' && <p>Ovo je stranica za profesore.</p>}
+        {userRole === 'admin' && <p>Ovo je stranica za administratore.</p>}
         {professors.map((prof) => (
           <div
             key={prof.id}
@@ -231,7 +228,7 @@ const UserPage = () => {
               {expandedId === prof.id ? prof.titula : ''}
             </div>
             <span className="prof-slots">
-            {prof.freeTopics} / {prof.totalTopics}
+              {prof.freeTopics} / {prof.totalTopics}
             </span>
             <button
               className="pogledaj-btn"

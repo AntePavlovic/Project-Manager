@@ -382,55 +382,91 @@ const AdminPage = () => {
   const handleAddStudent = async () => {
     const { data, error } = await supabase.auth.signUp({
       email: studentData.email,
-      password: studentData.password, // Koristi unesenu lozinku
+      password: studentData.password,
     });
-
+  
     if (error) {
       console.error('Greška pri kreiranju računa:', error);
       return;
     }
-
-    const { error: dbError } = await supabase.from('studenti').insert({
-      ime: studentData.ime,
-      prezime: studentData.prezime,
-      email: studentData.email,
-      smjer_id: studentData.smjer_id,
-    });
-
+  
+    const { data: studentInsert, error: dbError } = await supabase
+      .from('studenti')
+      .insert({
+        ime: studentData.ime,
+        prezime: studentData.prezime,
+        email: studentData.email,
+        smjer_id: studentData.smjer_id,
+      })
+      .select('id')  // Ovo dohvaća ID novog studenta
+      .single();
+  
     if (dbError) {
       console.error('Greška pri dodavanju studenta u bazu:', dbError);
+      return;
+    }
+  
+    const { error: korisnikError } = await supabase
+      .from('korisnici')
+      .insert({
+        id: data.user.id,
+        uloga: 'student',
+        student_id: studentInsert.id,
+        email: studentData.email,
+      });
+  
+    if (korisnikError) {
+      console.error('Greška pri dodavanju u korisnici:', korisnikError);
     } else {
       alert('Student uspješno dodan!');
       setShowStudentModal(false);
     }
   };
-
   const handleAddProfessor = async () => {
     const { data, error } = await supabase.auth.signUp({
       email: professorData.email,
-      password: professorData.password, // Koristi unesenu lozinku
+      password: professorData.password,
     });
-
+  
     if (error) {
       console.error('Greška pri kreiranju računa:', error);
       return;
     }
-
-    const { error: dbError } = await supabase.from('profesori').insert({
-      ime: professorData.ime,
-      prezime: professorData.prezime,
-      email: professorData.email,
-      fakultet_id: professorData.fakultet_id, // Koristi ID fakulteta iz padajućeg izbornika
-      titula: professorData.titula,
-    });
-
+  
+    const { data: profInsert, error: dbError } = await supabase
+      .from('profesori')
+      .insert({
+        ime: professorData.ime,
+        prezime: professorData.prezime,
+        email: professorData.email,
+        fakultet_id: professorData.fakultet_id,
+        titula: professorData.titula,
+      })
+      .select('id')
+      .single();
+  
     if (dbError) {
       console.error('Greška pri dodavanju profesora u bazu:', dbError);
+      return;
+    }
+  
+    const { error: korisnikError } = await supabase
+      .from('korisnici')
+      .insert({
+        id: data.user.id,
+        uloga: 'profesor',
+        profesor_id: profInsert.id,
+        email: professorData.email,
+      });
+  
+    if (korisnikError) {
+      console.error('Greška pri dodavanju u korisnici:', korisnikError);
     } else {
       alert('Profesor uspješno dodan!');
       setShowProfessorModal(false);
     }
   };
+  
 
   return (
     <>

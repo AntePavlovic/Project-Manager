@@ -1,128 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
+import '../styles/NavBar.css'; // Dodano povezivanje CSS datoteke
 
-const navBarStyles = `
-.custom-navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  min-width: 900px;
-  background: #fff;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-  z-index: 100;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  height: 64px;
-  padding: 0 16px;
-  box-sizing: border-box;
-  overflow-x: auto;
-}
-.custom-navbar .navbar-brand {
-  display: flex;
-  align-items: center;
-  margin-right: 32px;
-  text-decoration: none;
-}
-.custom-navbar .logo {
-  height: 40px;
-  margin-right: 10px;
-}
-.custom-navbar .nav {
-  display: flex;
-  flex-direction: row;
-  gap: 24px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  height: 100%;
-  position: relative;
-  flex-wrap: nowrap;
-}
-.custom-navbar .nav-link,
-.custom-navbar .nav-link:hover {
-  color: #222;
-  text-decoration: none;
-  font-weight: 500;
-  padding: 8px 12px 4px 12px;
-  border-radius: 4px 4px 0 0;
-  transition: background 0.2s, color 0.2s;
-  position: relative;
-  display: flex;
-  align-items: center;
-  height: 64px;
-  box-sizing: border-box;
-  background: transparent;
-  white-space: nowrap;
-}
-.custom-navbar .nav-link.active {
-  color: #002147;
-}
-.custom-navbar .usermenu-container {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-}
-.custom-navbar .login a {
-  color: #002147;
-  font-weight: 600;
-  text-decoration: none;
-  border-radius: 4px;
-  background: #f2f2f2;
-  transition: background 0.2s;
-  padding: 8px 16px;
-  display: inline-block;
-}
-.custom-navbar .login a:hover {
-  background: #1976d2;
-  color: #222;
-}
-.custom-navbar .nav-highlight {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  height: 4px;
-  background: #1976d2;
-  border-radius: 0;
-  transition: left 0.2s, width 0.2s;
-  z-index: 101;
-}
-.custom-navbar .logout-button {
-  color: #002147;
-  font-weight: 600;
-  text-decoration: none;
-  border-radius: 4px;
-  background: #f2f2f2;
-  transition: background 0.2s;
-  padding: 8px 16px;
-  display: inline-block;
-  border: none;
-  cursor: pointer;
-}
-
-.custom-navbar .logout-button:hover {
-  background: #1976d2;
-  color: #fff;
-}
-`;
-
-const NavBar = () => {
+const NavBar = ({ userRole }) => {
   const [active, setActive] = useState('odabir-teme');
   const navRef = useRef(null);
   const [highlightStyle, setHighlightStyle] = useState({ left: 0, width: 0 });
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!document.getElementById('custom-navbar-styles')) {
-      const style = document.createElement('style');
-      style.id = 'custom-navbar-styles';
-      style.innerHTML = navBarStyles;
-      document.head.appendChild(style);
-    }
-  }, []);
 
   useEffect(() => {
     if (navRef.current) {
@@ -144,9 +30,7 @@ const NavBar = () => {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    alert('Odjava uspješna!');
-    setIsLoggedIn(false);
-    navigate('/'); // Navigacija na početnu stranicu
+    navigate('/');
   };
 
   return (
@@ -158,57 +42,70 @@ const NavBar = () => {
           alt="SUMARUM"
         />
       </a>
-      <ul className="nav" ref={navRef} style={{ position: 'relative', flex: 1 }}>
+      <ul className="nav" ref={navRef}>
         <li>
-          <a
-            className={`nav-link${active === 'odabir-teme' ? ' active' : ''}`}
-            href="#"
-            onClick={e => {
-              e.preventDefault();
-              setActive('odabir-teme');
-              navigate('/');
-            }}
-          >
-            Odabir Teme
+          <a className="nav-link" onClick={() => navigate('/Pocetna')}>
+            Početna
           </a>
         </li>
-        <li>
-          <a
-            className={`nav-link${active === 'druga-stavka' ? ' active' : ''}`}
-            href="#"
-            onClick={() => setActive('druga-stavka')}
-          >
-            Druga Stavka
-          </a>
-        </li>
-        <li>
-          <a
-            className="nav-link"
-            href="/admin"
-            style={{ color: '#1976d2', fontWeight: 600 }}
-          >
-            Admin Page
-          </a>
-        </li>
-        <div
-          className="nav-highlight"
-          style={{
-            left: highlightStyle.left,
-            width: highlightStyle.width,
-          }}
-        />
-      </ul>
-      <div className="usermenu-container">
-        {isLoggedIn ? (
-          <button onClick={handleLogout} className="logout-button">
-            Odjavi se
-          </button>
-        ) : (
-          <span className="login">
-            <a href="https://eucenje.sum.ba/moodle/login/index.php">Prijava</a>
-          </span>
+        {userRole === 'student' && (
+          <>
+            <li>
+              <a className="nav-link" onClick={() => navigate('/PregledProfesora')}>
+                Profesori
+              </a>
+            </li>
+            <li>
+              <a className="nav-link" onClick={() => navigate('/OdabirProjekta')}>
+                Odabir Projekta
+              </a>
+            </li>
+            <li>
+              <a className="nav-link" onClick={() => navigate('/PrijavljeniProjekti')}>
+                Prijavljeni Projekti
+              </a>
+            </li>
+          </>
         )}
-      </div>
+        {userRole === 'profesor' && (
+          <>
+            <li>
+              <a className="nav-link" onClick={() => navigate('/DodajProjekt')}>
+                Dodaj Projekt
+              </a>
+            </li>
+            <li>
+              <a className="nav-link" onClick={() => navigate('/MojiProjekti')}>
+                Moji Projekti
+              </a>
+            </li>
+          </>
+        )}
+        {userRole === 'admin' && (
+          <>
+            <li>
+              <a className="nav-link" onClick={() => navigate('/DodajKorisnike')}>
+                Dodaj Korisnike
+              </a>
+            </li>
+            <li>
+              <a className="nav-link" onClick={() => navigate('/DodajProjekt')}>
+                Dodaj Projekat
+              </a>
+            </li>
+            <li>
+              <a className="nav-link" onClick={() => navigate('/PregledajProjekte')}>
+                Pregledaj Projekte
+              </a>
+            </li>
+          </>
+        )}
+        <li>
+          <button className="logout-button" onClick={handleLogout}>
+            Odjavi me
+          </button>
+        </li>
+      </ul>
     </nav>
   );
 };

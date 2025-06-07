@@ -21,7 +21,7 @@ const LogInPage = () => {
       setErrorMessage(error.message);
     } else {
       alert('Prijava uspješna!');
-      navigate('/user'); // Navigacija na UserPage
+      navigate('/Pocetna'); // Navigacija na UserPage
     }
   };
 
