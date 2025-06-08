@@ -1,0 +1,126 @@
+
+.userpage-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 32px;
+  padding-left: 10%;
+  padding-top: 64px;
+  min-height: 80vh;
+  margin-top: 64px;
+}
+.prof-modal {
+  position: relative;
+  width: 220px;
+  height: 250px;
+  min-width: 220px;
+  max-width: 220px;
+  min-height: 250px;
+  max-height: 250px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.2s, box-shadow 0.2s, width 0.2s, height 0.2s;
+  cursor: pointer;
+  overflow: hidden;
+}
+.prof-modal:hover {
+  transform: scale(1.07);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+}
+.prof-modal.expanded {
+  width: 340px;
+  height: 420px;
+  min-width: 340px;
+  max-width: 340px;
+  min-height: 420px;
+  max-height: 420px;
+  z-index: 10;
+  box-shadow: 0 12px 48px rgba(0,0,0,0.22);
+  transform: scale(1.12);
+}
+.prof-image {
+  width: 100px;
+  height: 100px;
+  min-width: 100px;
+  min-height: 100px;
+  max-width: 100px;
+  max-height: 100px;
+  border-radius: 50%;
+  margin-top: 24px;
+  object-fit: cover;
+  background: #eee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1976d2;
+  text-transform: uppercase;
+  user-select: none;
+}
+.prof-modal.expanded .prof-image {
+  width: 150px;
+  height: 150px;
+  min-width: 150px;
+  min-height: 150px;
+  max-width: 150px;
+  max-height: 150px;
+}
+.prof-name {
+  margin: 18px 0 0 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+  text-align: center;
+}
+.prof-title {
+  margin: 8px 0 0 0;
+  font-size: 1.05rem;
+  color: #1976d2;
+  font-weight: 500;
+  text-align: center;
+  min-height: 24px;
+  transition: opacity 0.3s;
+  opacity: 1;
+}
+.prof-modal:not(.expanded) .prof-title {
+  opacity: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+.prof-slots {
+  position: absolute;
+  bottom: 18px;
+  right: 18px;
+  background: #f5f5f5;
+  padding: 7px 16px;
+  border-radius: 16px;
+  font-size: 1rem;
+  color: #333;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+}
+.pogledaj-btn {
+  position: absolute;
+  bottom: 18px;
+  left: 18px;
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  padding: 8px 20px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.15);
+}
+.pogledaj-btn:hover {
+  background: #1251a3;
+}
+;

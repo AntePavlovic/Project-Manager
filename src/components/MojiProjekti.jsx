@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import NavBar from './NavBar';
 import { supabase } from '../supabaseClient';
+import styles from '../styles/MojiProjekti.css';
 
 const MojiProjekti = ({ userRole, profesorId }) => {
   const [projekti, setProjekti] = useState([]);
@@ -234,91 +235,5 @@ const MojiProjekti = ({ userRole, profesorId }) => {
     </>
   );
 };
-
-const styles = `
-.moji-projekti-container {
-  padding: 80px 20px;
-  text-align: center;
-}
-
-.projekti-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-  margin-top: 20px;
-}
-
-.projekt-card {
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  text-align: left;
-  max-width: 300px;
-  margin: 0 auto;
-  position: relative;
-}
-
-.delete-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: transparent;
-  border: none;
-  color: #d32f2f;
-  font-size: 1.2rem;
-  cursor: pointer;
-}
-
-.delete-button:hover {
-  color: #b71c1c;
-}
-
-.projekt-card h2 {
-  font-size: 1.5rem;
-  margin-bottom: 10px;
-}
-
-.projekt-card p {
-  font-size: 1rem;
-  margin: 5px 0;
-}
-
-.prijave-container {
-  margin-top: 15px;
-  border-top: 1px solid #ccc;
-  padding-top: 10px;
-}
-
-.prijave-container h3 {
-  font-size: 1.2rem;
-  margin-bottom: 10px;
-}
-
-.prijava-item {
-  margin-bottom: 10px;
-}
-
-.prijava-item button {
-  margin-top: 5px;
-  padding: 5px 10px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.prijava-item button:hover {
-  background-color: #1251a3;
-}
-
-.prijava-item button[style*="background-color: #d32f2f"] {
-  background-color: #d32f2f;
-  color: white;
-}
-
-.prijava-item button[style*="background-color: #d32f2f"]:hover {
-  background-color: #b71c1c;
-}
-`;
 
 export default MojiProjekti;

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import NavBar from './NavBar';
 import { supabase } from '../supabaseClient';
+import styles from '../styles/DodajProjekt.css';
 
 const PregledajProjekte = ({ userRole }) => {
   const [projekti, setProjekti] = useState([]);
@@ -71,39 +72,5 @@ const PregledajProjekte = ({ userRole }) => {
     </>
   );
 };
-
-const styles = `
-.pregledaj-projekte-container {
-  padding: 80px 20px; /* Dodajemo padding od vrha za prostor ispod navigacijske trake */
-  text-align: center;
-}
-
-.projekti-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Smanjujemo minimalnu širinu kartica */
-  gap: 20px;
-  margin-top: 20px;
-}
-
-.projekt-card {
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  text-align: left;
-  max-width: 300px; /* Ograničavamo maksimalnu širinu kartica */
-  margin: 0 auto; /* Centriramo kartice unutar grida */
-}
-
-.projekt-card h2 {
-  font-size: 1.5rem;
-  margin-bottom: 10px;
-}
-
-.projekt-card p {
-  font-size: 1rem;
-  margin: 5px 0;
-}
-`;
 
 export default PregledajProjekte;

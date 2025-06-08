@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import NavBar from './NavBar';
 import { supabase } from '../supabaseClient';
-
+import styles from '../styles/DodajProjekt.css';
 const DodajProjekt = ({ userRole, profesorId }) => {
   const [projektData, setProjektData] = useState({
     naslov: '',
@@ -143,6 +143,19 @@ const DodajProjekt = ({ userRole, profesorId }) => {
     };
   }, []);
 
+  useEffect(() => {
+    const formSection = document.querySelector('.form-section');
+    if (formSection) {
+      formSection.style.opacity = '0';
+      formSection.style.transform = 'translateY(-20px)';
+      setTimeout(() => {
+        formSection.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        formSection.style.opacity = '1';
+        formSection.style.transform = 'translateY(0)';
+      }, 100);
+    }
+  }, []);
+
   const filteredSmjerovi = smjerovi.filter(
     (smjer) => smjer.fakultet_id === parseInt(projektData.fakultet_id)
   );
@@ -227,49 +240,5 @@ const DodajProjekt = ({ userRole, profesorId }) => {
   );
 };
 
-const styles = `
-.dodaj-projekt-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: calc(100vh - 64px);
-  text-align: center;
-}
-
-.form-section {
-  margin-top: 20px;
-  width: 100%;
-  max-width: 400px;
-}
-
-.form-section input,
-.form-section textarea,
-.form-section select {
-  display: block;
-  width: 100%;
-  margin-bottom: 10px;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.form-section textarea {
-  height: 100px;
-}
-
-.form-section button {
-  padding: 10px 20px;
-  background-color: #1976d2;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.form-section button:hover {
-  background-color: #1251a3;
-}
-`;
 
 export default DodajProjekt;

@@ -1,0 +1,78 @@
+.dodaj-projekt-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - 64px);
+  text-align: center;
+}
+
+.form-section {
+  margin-top: 20px;
+  width: 100%;
+  max-width: 400px;
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+}
+
+.form-section input,
+.form-section textarea{
+    display: block;
+    width: 94%;
+    margin-bottom: 15px;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: border-color 0.2s;
+}
+.form-section select {
+    display: block;
+    width: 100.5%;
+    margin-bottom: 15px;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: border-color 0.2s, transform 0.3s ease;
+  }
+
+  .form-section select:focus {
+    border-color: #1976d2;
+    outline: none;
+    transform: scale(1.02); /* Slight zoom effect */
+  }
+
+.form-section input:focus,
+.form-section textarea:focus,
+.form-section select:focus {
+  border-color: #1976d2;
+  outline: none;
+}
+
+.form-section textarea {
+  height: 120px;
+  resize: none;
+}
+
+.form-section button {
+  padding: 12px 24px;
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: background-color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 12px rgba(25, 118, 210, 0.2);
+}
+
+.form-section button:hover {
+  background-color: #1251a3;
+  box-shadow: 0 6px 16px rgba(25, 118, 210, 0.3);
+}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import NavBar from './NavBar';
 import { supabase } from '../supabaseClient';
+import '../styles/DodajKorisnike.css';
 
 const DodajKorisnike = ({ userRole }) => {
   const [showStudentModal, setShowStudentModal] = useState(false);
@@ -274,107 +275,7 @@ const DodajKorisnike = ({ userRole }) => {
   );
 };
 
-const styles = `
-.modal-bg {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
 
-.modal {
-  background: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
-  width: 400px;
-  max-width: 90%;
-}
 
-.modal input {
-  display: block;
-  width: 100%;
-  margin-bottom: 10px;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.modal select {
-  display: block;
-  width: 100%;
-  margin-bottom: 10px;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.modal button {
-  margin-right: 10px;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  background: #1976d2;
-  color: #fff;
-  cursor: pointer;
-}
-
-.modal button:hover {
-  background: #1251a3;
-}
-
-.add-button {
-  padding: 10px 20px;
-  background-color: #1976d2;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.add-button:hover {
-  background-color: #1251a3;
-}
-
-.dodaj-korisnike-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Horizontalno centriranje */
-  justify-content: center; /* Vertikalno centriranje */
-  height: calc(100vh - 64px); /* Oduzimamo visinu navigacijske trake */
-  text-align: center;
-}
-
-.form-section {
-  margin-bottom: 40px;
-}
-
-.form-section input {
-  display: block;
-  margin: 10px 0;
-  padding: 8px;
-  width: 100%;
-  max-width: 400px;
-}
-
-.form-section button {
-  padding: 10px 20px;
-  background-color: #1976d2;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.form-section button:hover {
-  background-color: #1251a3;
-}
-`;
 
 export default DodajKorisnike;

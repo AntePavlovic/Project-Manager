@@ -2,37 +2,7 @@ import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import NavBar from './NavBar';
 import { supabase } from '../supabaseClient';
-
-const styles = `
-.profesor-page-container {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: left;
-  width: 90%;
-  margin-left: 5%;
-  margin-bottom: 5%;
-  max-width: 900px;
-  min-height: 60%;
-  font-family: 'Segoe UI', Arial, sans-serif;
-}
-.profesor-info {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-.profesor-name {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #222;
-  margin-top: 160px;
-}
-.profesor-title {
-  font-size: 1.1rem;
-  color: #1976d2;
-  font-weight: 500;
-}
-`;
+import styles from '../styles/ProfesorPage.css'; // Import CSS styles
 
 const ProfesorPage = () => {
   const location = useLocation();
