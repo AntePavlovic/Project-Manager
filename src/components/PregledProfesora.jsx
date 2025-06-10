@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
 import NavBar from './NavBar'; // Importujemo NavBar komponentu
-import styles from '../styles/PregledProfesora.css'; // Importujemo CSS stilove
+import '../styles/PregledProfesora.css'; // Importujemo CSS stilove
 
 
 const PregledProfesora = () => {
@@ -51,50 +51,51 @@ const PregledProfesora = () => {
   return (
     <>
       <NavBar userRole="student" /> {/* Dodajemo NavBar */}
-      <div style={styles.container}>
+      <div className="container">
         <h1>Pregled Profesora</h1>
-        <div style={styles.professorList}>
+        <div className="professor-list">
           {professors.map((prof) => (
-            <div
-              key={prof.id}
-              style={styles.professorCard}
-              onClick={() => handleProfessorClick(prof)}
-              onMouseEnter={(e) => (e.currentTarget.style.boxShadow = styles.professorCardHover.boxShadow)}
-              onMouseLeave={(e) => (e.currentTarget.style.boxShadow = styles.professorCard.boxShadow)}
-            >
-              <div style={styles.professorImage}>
-                {prof.ime[0]}{prof.prezime[0]}
+            <div key={prof.id}>
+              <div
+                className="professor-card"
+                onClick={() => handleProfessorClick(prof)}
+                onMouseEnter={(e) => e.currentTarget.classList.add('professor-card-hover')}
+                onMouseLeave={(e) => e.currentTarget.classList.remove('professor-card-hover')}
+              >
+                <div className="professor-image">
+                  {prof.ime[0]}{prof.prezime[0]}
+                </div>
+                <h2>{prof.ime} {prof.prezime}</h2>
+                <p>{prof.titula}</p>
               </div>
-              <h2>{prof.ime} {prof.prezime}</h2>
-              <p>{prof.titula}</p>
+
+              {selectedProfessor && selectedProfessor.id === prof.id && (
+                <div className="modal-bg" onClick={closeModal}>
+                  <div className="modal" onClick={(e) => e.stopPropagation()}>
+                    <h2 className="modal-header">{prof.ime} {prof.prezime}</h2>
+                    <p>{prof.titula}</p>
+                    <h3>Projekti:</h3>
+                    <ul className="modal-list">
+                      {professorProjects.map((project, index) => (
+                        <li key={index} className="modal-list-item">
+                          <strong>{project.naslov}</strong>: {project.opis} ({project.max_broj_studenata} studenata)
+                        </li>
+                      ))}
+                    </ul>
+                    <button
+                      className="modal-button"
+                      onMouseEnter={(e) => e.currentTarget.classList.add('modal-button-hover')}
+                      onMouseLeave={(e) => e.currentTarget.classList.remove('modal-button-hover')}
+                      onClick={closeModal}
+                    >
+                      Zatvori
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           ))}
         </div>
-
-        {selectedProfessor && (
-          <div style={styles.modalBg} onClick={closeModal}>
-            <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
-              <h2 style={styles.modalHeader}>{selectedProfessor.ime} {selectedProfessor.prezime}</h2>
-              <p>{selectedProfessor.titula}</p>
-              <h3>Projekti:</h3>
-              <ul style={styles.modalList}>
-                {professorProjects.map((project, index) => (
-                  <li key={index} style={styles.modalListItem}>
-                    <strong>{project.naslov}</strong>: {project.opis} ({project.max_broj_studenata} studenata)
-                  </li>
-                ))}
-              </ul>
-              <button
-                style={styles.modalButton}
-                onMouseEnter={(e) => (e.currentTarget.style.background = styles.modalButtonHover.background)}
-                onMouseLeave={(e) => (e.currentTarget.style.background = styles.modalButton.background)}
-                onClick={closeModal}
-              >
-                Zatvori
-              </button>
-            </div>
-          </div>
-        )}
       </div>
     </>
   );

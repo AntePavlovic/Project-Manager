@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import NavBar from './NavBar';
 import { supabase } from '../supabaseClient';
-import '../styles/DodajKorisnike.css';
+import styles from '../styles/DodajKorisnike.css';
 
 const DodajKorisnike = ({ userRole }) => {
   const [showStudentModal, setShowStudentModal] = useState(false);

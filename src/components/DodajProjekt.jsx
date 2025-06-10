@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import NavBar from './NavBar';
 import { supabase } from '../supabaseClient';
 import styles from '../styles/DodajProjekt.css';
+
 const DodajProjekt = ({ userRole, profesorId }) => {
   const [projektData, setProjektData] = useState({
     naslov: '',

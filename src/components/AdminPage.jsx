@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import NavBar from './NavBar';
 import { supabase } from '../supabaseClient';
 import { useNavigate } from 'react-router-dom';
-import '../styles/AdminPage.css';
+import styles from '../styles/AdminPage.css';
 
 const AdminPage = () => {
   const [professors, setProfessors] = useState([]);

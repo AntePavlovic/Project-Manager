@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/LogInPage.css';
+import styles from '../styles/LogInPage.css';
 import { supabase } from "../supabaseClient";
 
 const LogInPage = () => {
@@ -54,9 +54,6 @@ const LogInPage = () => {
         </div>
         <div className="forgot-password">
           <a href="/forgot-password">Zaboravili ste lozinku?</a>
-        </div>
-        <div className="register-link">
-          <a href="/register">Nemate račun? Registrirajte se</a>
         </div>
         <button type="submit" className="login-button">Prijavi se</button>
       </form>
