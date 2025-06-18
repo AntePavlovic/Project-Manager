@@ -17,7 +17,6 @@
   padding: 20px;
   text-align: left;
   max-width: 300px; /* Ograničavamo maksimalnu širinu kartica */
-  margin: 0 auto; /* Centriramo kartice unutar grida */
 }
 
 .projekt-card h2 {
