@@ -4,9 +4,10 @@
 }
 
 .projekti-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Smanjujemo minimalnu širinu kartica */
-  gap: 20px;
+  display: flex; /* Koristimo flexbox za prikaz kartica jedan pored drugog */
+  flex-wrap: wrap; /* Omogućavamo prelamanje kartica na manjim ekranima */
+  justify-content: flex-start; /* Poravnanje kartica na početak reda */
+  gap: 60px; /* Povećavamo razmak između kartica */
   margin-top: 20px;
 }
 
@@ -16,6 +17,7 @@
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
   padding: 20px;
   text-align: left;
+  flex: 0 1 calc(33.333% - 20px); /* Kartice zauzimaju trećinu širine grida minus razmak */
   max-width: 300px; /* Ograničavamo maksimalnu širinu kartica */
 }
 
@@ -27,4 +29,4 @@
 .projekt-card p {
   font-size: 1rem;
   margin: 5px 0;
-};
+}

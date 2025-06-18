@@ -17,12 +17,12 @@
   border-radius: 8px;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
   width: 400px;
-  max-width: 90%;
+  
 }
 
 .modal input {
   display: block;
-  width: 100%;
+  width: 90%; /* Reduced width */
   margin-bottom: 10px;
   padding: 8px;
   border: 1px solid #ccc;
@@ -31,7 +31,7 @@
 
 .modal select {
   display: block;
-  width: 100%;
+  width: 105%;
   margin-bottom: 10px;
   padding: 8px;
   border: 1px solid #ccc;
@@ -40,38 +40,57 @@
 
 .modal button {
   margin-right: 10px;
-  padding: 8px 16px;
+  padding: 8px 20px;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   background: #1976d2;
   color: #fff;
+  font-size: 1rem;
+  font-weight: bold;
   cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
 }
 
 .modal button:hover {
   background: #1251a3;
+  transform: scale(1.05);
 }
 
 .add-button {
-  padding: 10px 20px;
+  padding: 12px 20px;
+  justify-content: center;
+  margin-left: 4%;
+  margin-top: 10%;
   background-color: #1976d2;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: bold;
   cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
 }
 
 .add-button:hover {
   background-color: #1251a3;
+  transform: scale(1.05);
 }
 
 .dodaj-korisnike-container {
   display: flex;
   flex-direction: column;
-  align-items: center; /* Horizontalno centriranje */
-  justify-content: center; /* Vertikalno centriranje */
-  height: calc(100vh - 64px); /* Oduzimamo visinu navigacijske trake */
+  align-items: center;
+  justify-content: center;
+  height: 95.5vh;
+  overflow: hidden;
   text-align: center;
+  background: #f9f9f9;
+  padding: 20px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3)), url('../images/DodajKorisnike.jpg');
+  background-size: cover;
+  background-position: center;
 }
 
 .form-section {
@@ -82,8 +101,7 @@
   display: block;
   margin: 10px 0;
   padding: 8px;
-  width: 100%;
-  max-width: 400px;
+  width: 90%;
 }
 
 .form-section button {
@@ -98,4 +116,45 @@
 .form-section button:hover {
   background-color: #1251a3;
 }
-;
+
+/* Added styling for a modal container with buttons and form */
+.modal-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+  width: 400px;
+  max-width: 90%;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal-container .modal-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.modal-container .modal-buttons button {
+  padding: 10px 20px;
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.modal-container .modal-buttons button:hover {
+  background-color: #1251a3;
+  transform: scale(1.05);
+}

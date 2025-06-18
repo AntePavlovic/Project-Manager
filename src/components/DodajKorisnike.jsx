@@ -151,130 +151,131 @@ const DodajKorisnike = ({ userRole }) => {
     <>
       <NavBar userRole={userRole} />
       <div className="dodaj-korisnike-container">
-        <h1>Dodaj Korisnike</h1>
-        <div style={{ display: 'flex', gap: '16px', marginBottom: '24px' }}>
-          <button className="add-button" onClick={() => setShowStudentModal(true)}>
-            Dodaj Studenta
-          </button>
-          <button className="add-button" onClick={() => setShowProfessorModal(true)}>
-            Dodaj Profesora
-          </button>
+        <div className="form-section">
+          <h1>Dodaj Korisnike</h1>
+          <div style={{ display: 'flex', gap: '16px', marginBottom: '24px' }}>
+            <button className="add-button" onClick={() => setShowStudentModal(true)}>
+              Dodaj Studenta
+            </button>
+            <button className="add-button" onClick={() => setShowProfessorModal(true)}>
+              Dodaj Profesora
+            </button>
+          </div>
+
+          {showStudentModal && (
+            <div className="modal-bg">
+              <div className="modal">
+                <h2>Dodaj Studenta</h2>
+                <input
+                  type="text"
+                  placeholder="Ime"
+                  value={studentData.ime}
+                  onChange={(e) => setStudentData({ ...studentData, ime: e.target.value })}
+                />
+                <input
+                  type="text"
+                  placeholder="Prezime"
+                  value={studentData.prezime}
+                  onChange={(e) => setStudentData({ ...studentData, prezime: e.target.value })}
+                />
+                <input
+                  type="email"
+                  placeholder="Email"
+                  value={studentData.email}
+                  onChange={(e) => setStudentData({ ...studentData, email: e.target.value })}
+                />
+                <select
+                  value={studentData.fakultet_id}
+                  onChange={(e) => {
+                    setStudentData({ ...studentData, fakultet_id: e.target.value });
+                    fetchSmjerovi(e.target.value);
+                  }}
+                >
+                  <option value="">Odaberite fakultet</option>
+                  {fakulteti.map((fakultet) => (
+                    <option key={fakultet.id} value={fakultet.id}>
+                      {fakultet.naziv}
+                    </option>
+                  ))}
+                </select>
+                <select
+                  value={studentData.smjer_id}
+                  onChange={(e) => setStudentData({ ...studentData, smjer_id: e.target.value })}
+                >
+                  <option value="">Odaberite smjer</option>
+                  {smjerovi.map((smjer) => (
+                    <option key={smjer.id} value={smjer.id}>
+                      {smjer.naziv}
+                    </option>
+                  ))}
+                </select>
+                <input
+                  type="password"
+                  placeholder="Lozinka"
+                  value={studentData.password}
+                  onChange={(e) => setStudentData({ ...studentData, password: e.target.value })}
+                />
+                <button onClick={handleAddStudent}>Dodaj</button>
+                <button onClick={() => setShowStudentModal(false)}>Zatvori</button>
+              </div>
+            </div>
+          )}
+
+          {showProfessorModal && (
+            <div className="modal-bg">
+              <div className="modal">
+                <h2>Dodaj Profesora</h2>
+                <input
+                  type="text"
+                  placeholder="Ime"
+                  value={professorData.ime}
+                  onChange={(e) => setProfessorData({ ...professorData, ime: e.target.value })}
+                />
+                <input
+                  type="text"
+                  placeholder="Prezime"
+                  value={professorData.prezime}
+                  onChange={(e) => setProfessorData({ ...professorData, prezime: e.target.value })}
+                />
+                <input
+                  type="email"
+                  placeholder="Email"
+                  value={professorData.email}
+                  onChange={(e) => setProfessorData({ ...professorData, email: e.target.value })}
+                />
+                <select
+                  value={professorData.fakultet_id}
+                  onChange={(e) => setProfessorData({ ...professorData, fakultet_id: e.target.value })}
+                >
+                  <option value="">Odaberite fakultet</option>
+                  {fakulteti.map((fakultet) => (
+                    <option key={fakultet.id} value={fakultet.id}>
+                      {fakultet.naziv}
+                    </option>
+                  ))}
+                </select>
+                <input
+                  type="text"
+                  placeholder="Titula"
+                  value={professorData.titula}
+                  onChange={(e) => setProfessorData({ ...professorData, titula: e.target.value })}
+                />
+                <input
+                  type="password"
+                  placeholder="Lozinka"
+                  value={professorData.password}
+                  onChange={(e) => setProfessorData({ ...professorData, password: e.target.value })}
+                />
+                <button onClick={handleAddProfessor}>Dodaj</button>
+                <button onClick={() => setShowProfessorModal(false)}>Zatvori</button>
+              </div>
+            </div>
+          )}
         </div>
-
-        {showStudentModal && (
-          <div className="modal-bg">
-            <div className="modal">
-              <h2>Dodaj Studenta</h2>
-              <input
-                type="text"
-                placeholder="Ime"
-                value={studentData.ime}
-                onChange={(e) => setStudentData({ ...studentData, ime: e.target.value })}
-              />
-              <input
-                type="text"
-                placeholder="Prezime"
-                value={studentData.prezime}
-                onChange={(e) => setStudentData({ ...studentData, prezime: e.target.value })}
-              />
-              <input
-                type="email"
-                placeholder="Email"
-                value={studentData.email}
-                onChange={(e) => setStudentData({ ...studentData, email: e.target.value })}
-              />
-              <select
-                value={studentData.fakultet_id}
-                onChange={(e) => {
-                  setStudentData({ ...studentData, fakultet_id: e.target.value });
-                  fetchSmjerovi(e.target.value);
-                }}
-              >
-                <option value="">Odaberite fakultet</option>
-                {fakulteti.map((fakultet) => (
-                  <option key={fakultet.id} value={fakultet.id}>
-                    {fakultet.naziv}
-                  </option>
-                ))}
-              </select>
-              <select
-                value={studentData.smjer_id}
-                onChange={(e) => setStudentData({ ...studentData, smjer_id: e.target.value })}
-              >
-                <option value="">Odaberite smjer</option>
-                {smjerovi.map((smjer) => (
-                  <option key={smjer.id} value={smjer.id}>
-                    {smjer.naziv}
-                  </option>
-                ))}
-              </select>
-              <input
-                type="password"
-                placeholder="Lozinka"
-                value={studentData.password}
-                onChange={(e) => setStudentData({ ...studentData, password: e.target.value })}
-              />
-              <button onClick={handleAddStudent}>Dodaj</button>
-              <button onClick={() => setShowStudentModal(false)}>Zatvori</button>
-            </div>
-          </div>
-        )}
-
-        {showProfessorModal && (
-          <div className="modal-bg">
-            <div className="modal">
-              <h2>Dodaj Profesora</h2>
-              <input
-                type="text"
-                placeholder="Ime"
-                value={professorData.ime}
-                onChange={(e) => setProfessorData({ ...professorData, ime: e.target.value })}
-              />
-              <input
-                type="text"
-                placeholder="Prezime"
-                value={professorData.prezime}
-                onChange={(e) => setProfessorData({ ...professorData, prezime: e.target.value })}
-              />
-              <input
-                type="email"
-                placeholder="Email"
-                value={professorData.email}
-                onChange={(e) => setProfessorData({ ...professorData, email: e.target.value })}
-              />
-              <select
-                value={professorData.fakultet_id}
-                onChange={(e) => setProfessorData({ ...professorData, fakultet_id: e.target.value })}
-              >
-                <option value="">Odaberite fakultet</option>
-                {fakulteti.map((fakultet) => (
-                  <option key={fakultet.id} value={fakultet.id}>
-                    {fakultet.naziv}
-                  </option>
-                ))}
-              </select>
-              <input
-                type="text"
-                placeholder="Titula"
-                value={professorData.titula}
-                onChange={(e) => setProfessorData({ ...professorData, titula: e.target.value })}
-              />
-              <input
-                type="password"
-                placeholder="Lozinka"
-                value={professorData.password}
-                onChange={(e) => setProfessorData({ ...professorData, password: e.target.value })}
-              />
-              <button onClick={handleAddProfessor}>Dodaj</button>
-              <button onClick={() => setShowProfessorModal(false)}>Zatvori</button>
-            </div>
-          </div>
-        )}
       </div>
     </>
   );
 };
-
 
 
 

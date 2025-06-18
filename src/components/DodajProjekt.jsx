@@ -165,8 +165,8 @@ const DodajProjekt = ({ userRole, profesorId }) => {
     <>
       <NavBar userRole={userRole} />
       <div className="dodaj-projekt-container">
-        <h1>Dodaj Projekt</h1>
         <div className="form-section">
+          <h2>Dodaj Projekt</h2>
           <input
             type="text"
             placeholder="Naslov"
@@ -236,6 +236,7 @@ const DodajProjekt = ({ userRole, profesorId }) => {
 
           <button onClick={handleAddProjekt}>Dodaj Projekt</button>
         </div>
+        <div className="horizontal-field"></div>
       </div>
     </>
   );

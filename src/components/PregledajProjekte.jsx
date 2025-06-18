@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import NavBar from './NavBar';
 import { supabase } from '../supabaseClient';
-import styles from '../styles/DodajProjekt.css';
+import styles from '../styles/PregledajProjekte.css';
 
 const PregledajProjekte = ({ userRole }) => {
   const [projekti, setProjekti] = useState([]);
