@@ -5,6 +5,8 @@ import styles from '../styles/OdabirProjekta.css';
 
 const OdabirProjekta = ({ studentId }) => {
   const [projekti, setProjekti] = useState([]);
+  const [imaZakljucanu, setImaZakljucanu] = useState(false);
+  const [tipFilter, setTipFilter] = useState(''); // Dodano za filtriranje
 
   useEffect(() => {
     const fetchProjekti = async () => {
@@ -31,6 +33,7 @@ const OdabirProjekta = ({ studentId }) => {
           max_broj_studenata, 
           zauzeta, 
           datoteka_url,
+          tip_teme,                
           smjerovi(naziv), 
           profesori(ime, prezime)
         `)
@@ -46,10 +49,27 @@ const OdabirProjekta = ({ studentId }) => {
         (projekt) => !prijavljeniIdevi.includes(projekt.id)
       );
 
+      console.log('Dostupni projekti:', dostupniProjekti);
+
       setProjekti(dostupniProjekti);
     };
 
     fetchProjekti();
+  }, [studentId]);
+
+  // Provjera da li je student zaključao temu
+  useEffect(() => {
+    const provjeriZakljucanu = async () => {
+      const { data } = await supabase
+        .from('prijave')
+        .select('id')
+        .eq('student_id', studentId)
+        .eq('zakljucan', true)
+        .single();
+
+      setImaZakljucanu(!!data);
+    };
+    provjeriZakljucanu();
   }, [studentId]);
 
   const handlePrijava = async (projektId) => {
@@ -100,36 +120,117 @@ const OdabirProjekta = ({ studentId }) => {
     };
   }, []);
 
+  // Filtriraj projekte po tipu
+  const filtriraniProjekti = tipFilter
+    ? projekti.filter((p) => p.tip_teme === tipFilter)
+    : projekti;
+
   return (
     <>
       <NavBar userRole="student" />
       <div className="odabir-projekta-container">
         <h1>Odabir Projekta</h1>
-        <div className="projekti-grid">
-          {projekti.map((projekt) => (
-            <div key={projekt.id} className="projekt-card">
-              <h2>{projekt.naslov}</h2>
-              <p>{projekt.opis}</p>
-              <p><strong>Max broj studenata:</strong> {projekt.max_broj_studenata}</p>
-              <p><strong>Smjer:</strong> {projekt.smjerovi?.naziv || 'N/A'}</p>
-              <p><strong>Profesor:</strong> {projekt.profesori?.ime} {projekt.profesori?.prezime}</p>
-              {projekt.datoteka_url && (
-                <p>
-                  <strong>Datoteka:</strong>{' '}
-                  <a href={projekt.datoteka_url} target="_blank" rel="noopener noreferrer">
-                    Dodatna dokumentacija
-                  </a>
-                </p>
-              )}
-              <button onClick={() => handlePrijava(projekt.id)}>Prijavi se</button>
-            </div>
-          ))}
+        {/* Dugmad za filtriranje */}
+        <div style={{ marginBottom: 24 }}>
+          <button
+            onClick={() => setTipFilter('preddiplomski')}
+            style={{
+              background: tipFilter === 'preddiplomski' ? '#1976d2' : '#e0e0e0',
+              color: tipFilter === 'preddiplomski' ? '#fff' : '#000',
+              marginRight: 8,
+              padding: '8px 16px',
+              border: 'none',
+              borderRadius: 4,
+              cursor: 'pointer'
+            }}
+          >
+            Preddiplomski
+          </button>
+          <button
+            onClick={() => setTipFilter('diplomski')}
+            style={{
+              background: tipFilter === 'diplomski' ? '#1976d2' : '#e0e0e0',
+              color: tipFilter === 'diplomski' ? '#fff' : '#000',
+              marginRight: 8,
+              padding: '8px 16px',
+              border: 'none',
+              borderRadius: 4,
+              cursor: 'pointer'
+            }}
+          >
+            Diplomski
+          </button>
+          <button
+            onClick={() => setTipFilter('projekt')}
+            style={{
+              background: tipFilter === 'projekt' ? '#1976d2' : '#e0e0e0',
+              color: tipFilter === 'projekt' ? '#fff' : '#000',
+              padding: '8px 16px',
+              border: 'none',
+              borderRadius: 4,
+              cursor: 'pointer'
+            }}
+          >
+            Projekt
+          </button>
+          <button
+            onClick={() => setTipFilter('')}
+            style={{
+              background: tipFilter === '' ? '#1976d2' : '#e0e0e0',
+              color: tipFilter === '' ? '#fff' : '#000',
+              marginLeft: 8,
+              padding: '8px 16px',
+              border: 'none',
+              borderRadius: 4,
+              cursor: 'pointer'
+            }}
+          >
+            Prikaži sve
+          </button>
         </div>
+        {imaZakljucanu ? (
+          <p style={{ color: 'red' }}>
+            Već ste zaključali temu i ne možete se prijaviti na novu!
+          </p>
+        ) : (
+          <div className="projekti-grid">
+            {filtriraniProjekti.map((projekt) => (
+              <div key={projekt.id} className="projekt-card">
+                <h2>{projekt.naslov}</h2>
+                <p>{projekt.opis}</p>
+                <p>
+                  <strong>Max broj studenata:</strong> {projekt.max_broj_studenata}
+                </p>
+                <p>
+                  <strong>Smjer:</strong> {projekt.smjerovi?.naziv || 'N/A'}
+                </p>
+                <p>
+                  <strong>Profesor:</strong> {projekt.profesori?.ime}{' '}
+                  {projekt.profesori?.prezime}
+                </p>
+                <p>
+                  <strong>Tip teme:</strong> {projekt.tip_teme || 'N/A'}
+                </p>
+                {projekt.datoteka_url && (
+                  <p>
+                    <strong>Datoteka:</strong>{' '}
+                    <a
+                      href={projekt.datoteka_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Dodatna dokumentacija
+                    </a>
+                  </p>
+                )}
+                <button onClick={() => handlePrijava(projekt.id)}>Prijavi se</button>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </>
   );
 };
-
-
 
 export default OdabirProjekta;

@@ -5,6 +5,7 @@ import styles from '../styles/MojiProjekti.css';
 
 const MojiProjekti = ({ userRole, profesorId }) => {
   const [projekti, setProjekti] = useState([]);
+  const [otvoreniProjekt, setOtvoreniProjekt] = useState(null);
 
   useEffect(() => {
     const fetchProjekti = async () => {
@@ -24,7 +25,7 @@ const MojiProjekti = ({ userRole, profesorId }) => {
           zauzeta, 
           datoteka_url, 
           smjerovi(naziv), 
-          prijave(id, studenti(ime, prezime), status)
+          prijave(id, studenti(ime, prezime), status, zakljucan, rad_url, ocjena)
         `)
         .eq('profesor_id', profesorId);
 
@@ -169,7 +170,7 @@ const MojiProjekti = ({ userRole, profesorId }) => {
         zauzeta, 
         datoteka_url, 
         smjerovi(naziv), 
-        prijave(id, studenti(ime, prezime), status)
+        prijave(id, studenti(ime, prezime), status, zakljucan, rad_url, ocjena)
       `)
       .eq('profesor_id', profesorId);
 
@@ -181,6 +182,9 @@ const MojiProjekti = ({ userRole, profesorId }) => {
     setProjekti(data);
   };
 
+  const handleOpenProjekt = (projekt) => setOtvoreniProjekt(projekt);
+  const handleCloseProjekt = () => setOtvoreniProjekt(null);
+
   return (
     <>
       <NavBar userRole={userRole} />
@@ -188,7 +192,12 @@ const MojiProjekti = ({ userRole, profesorId }) => {
         <h1>Moji Projekti</h1>
         <div className="projekti-grid">
           {projekti.map((projekt) => (
-            <div key={projekt.id} className="projekt-card">
+            <div
+              key={projekt.id}
+              className="projekt-card"
+              onClick={() => handleOpenProjekt(projekt)}
+              style={{ cursor: 'pointer' }}
+            >
               <button className="delete-button" onClick={() => handleDeleteProjekt(projekt.id)}>✕</button>
               <h2>{projekt.naslov}</h2>
               <p>{projekt.opis}</p>
@@ -232,6 +241,137 @@ const MojiProjekti = ({ userRole, profesorId }) => {
           ))}
         </div>
       </div>
+      {otvoreniProjekt && (
+        <div
+          className="modal-overlay"
+          onClick={handleCloseProjekt}
+          style={{
+            position: 'fixed',
+            top: 0, left: 0, right: 0, bottom: 0,
+            background: 'rgba(0,0,0,0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1000
+          }}
+        >
+          <div
+            className="modal-content"
+            onClick={e => e.stopPropagation()}
+            style={{
+              background: '#fff',
+              borderRadius: '10px',
+              padding: '32px',
+              width: '70vw',
+              height: '70vh',
+              overflowY: 'auto',
+              boxShadow: '0 0 20px rgba(0,0,0,0.3)',
+              position: 'relative'
+            }}
+          >
+            <button
+              onClick={handleCloseProjekt}
+              style={{
+                position: 'absolute',
+                top: 16,
+                right: 16,
+                background: '#d32f2f',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '50%',
+                width: 32,
+                height: 32,
+                fontSize: 20,
+                cursor: 'pointer'
+              }}
+            >✕</button>
+            <h2>{otvoreniProjekt.naslov}</h2>
+            <p>{otvoreniProjekt.opis}</p>
+            <p><strong>Max broj studenata:</strong> {otvoreniProjekt.max_broj_studenata}</p>
+            <p><strong>Broj prijavljenih:</strong> {otvoreniProjekt.broj_prijavljenih || 0}</p>
+            <p><strong>Zauzeta:</strong> {otvoreniProjekt.zauzeta ? 'Da' : 'Ne'}</p>
+            <p><strong>Smjer:</strong> {otvoreniProjekt.smjerovi?.naziv || 'N/A'}</p>
+            {otvoreniProjekt.datoteka_url && (
+              <p>
+                <strong>Datoteka:</strong>{' '}
+                <a href={otvoreniProjekt.datoteka_url} target="_blank" rel="noopener noreferrer">
+                  Dodatna dokumentacija
+                </a>
+              </p>
+            )}
+            <div className="prijave-container">
+              <h3>Prijave:</h3>
+              {otvoreniProjekt.prijave?.length > 0 ? (
+                otvoreniProjekt.prijave.map((prijava, index) => (
+                  <div key={index} className="prijava-item">
+                    <p>
+                      <strong>Student:</strong> {prijava.studenti?.ime} {prijava.studenti?.prezime}
+                      {prijava.zakljucan && (
+                        <span style={{
+                          color: 'green',
+                          fontWeight: 'bold',
+                          marginLeft: 8
+                        }}>
+                          (odabrano)
+                        </span>
+                      )}
+                      {' '} - <strong>Status:</strong> {prijava.status}
+                    </p>
+                    {prijava.rad_url && (
+                      <div style={{ marginLeft: 24 }}>
+                        <p>
+                          <strong>Rad predan na ocjenjivanje:</strong>{' '}
+                          <a href={prijava.rad_url} target="_blank" rel="noopener noreferrer">
+                            Preuzmi rad
+                          </a>
+                        </p>
+                        {/* Prikaz ocjene ili forma za unos */}
+                        {typeof prijava.ocjena === 'number' ? (
+                          <p><strong>Ocjena:</strong> {prijava.ocjena}</p>
+                        ) : (
+                          <form
+                            onSubmit={async (e) => {
+                              e.preventDefault();
+                              const formData = new FormData(e.target);
+                              const ocjena = parseInt(formData.get('ocjena'), 10);
+                              const { error } = await supabase
+                                .from('prijave')
+                                .update({ ocjena })
+                                .eq('id', prijava.id);
+                              if (!error) {
+                                alert('Ocjena spremljena!');
+                                refreshProjekti();
+                              } else {
+                                alert('Greška pri spremanju ocjene!');
+                              }
+                            }}
+                            style={{ marginTop: 8 }}
+                          >
+                            <label>
+                              Ocijeni rad:
+                              <input
+                                type="number"
+                                name="ocjena"
+                                min="1"
+                                max="5"
+                                required
+                                style={{ marginLeft: 8, width: 50 }}
+                              />
+                            </label>
+                            <button type="submit" style={{ marginLeft: 8 }}>Spremi</button>
+                          </form>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                ))
+              ) : (
+                <p>Nema prijava za ovu temu.</p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

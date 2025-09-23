@@ -11,7 +11,8 @@ const DodajProjekt = ({ userRole, profesorId }) => {
     smjer_id: '',
     profesor_id: profesorId || '',
     max_broj_studenata: '',
-    datoteka_url: '', // Dodano za URL datoteke
+    datoteka_url: '',
+    tip_teme: '', // Dodano!
   });
 
   const [fakulteti, setFakulteti] = useState([]);
@@ -114,7 +115,8 @@ const DodajProjekt = ({ userRole, profesorId }) => {
         smjer_id: projektData.smjer_id,
         profesor_id: projektData.profesor_id,
         max_broj_studenata: projektData.max_broj_studenata,
-        datoteka_url: datotekaUrl, // Spremanje URL-a datoteke ili null
+        datoteka_url: datotekaUrl,
+        tip_teme: projektData.tip_teme, // Dodano!
       });
 
     if (error) {
@@ -130,6 +132,7 @@ const DodajProjekt = ({ userRole, profesorId }) => {
         profesor_id: profesorId || '',
         max_broj_studenata: '',
         datoteka_url: '',
+        tip_teme: '', // Resetiranje tipa teme
       });
       setDatoteka(null); // Resetiramo datoteku
     }
@@ -167,6 +170,15 @@ const DodajProjekt = ({ userRole, profesorId }) => {
       <div className="dodaj-projekt-container">
         <div className="form-section">
           <h2>Dodaj Projekt</h2>
+          <select
+            value={projektData.tip_teme}
+            onChange={e => setProjektData({ ...projektData, tip_teme: e.target.value })}
+          >
+            <option value="">Odaberite tip teme</option>
+            <option value="preddiplomski">Preddiplomski</option>
+            <option value="diplomski">Diplomski</option>
+            <option value="projekt">Projekt</option>
+          </select>
           <input
             type="text"
             placeholder="Naslov"
@@ -234,6 +246,7 @@ const DodajProjekt = ({ userRole, profesorId }) => {
             onChange={(e) => setDatoteka(e.target.files[0])}
           />
 
+          
           <button onClick={handleAddProjekt}>Dodaj Projekt</button>
         </div>
         <div className="horizontal-field"></div>

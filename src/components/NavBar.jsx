@@ -109,7 +109,7 @@ const NavBar = ({ userRole }) => {
                 onClick={() => handleNavClick('/PrijavljeniProjekti', 'PrijavljeniProjekti')}
                 onMouseEnter={() => handleNavHover('PrijavljeniProjekti')}
               >
-                Prijavljeni Projekti
+                Moj Projekat
               </a>
             </li>
           </>
