@@ -20,8 +20,7 @@ const LogInPage = () => {
     if (error) {
       setErrorMessage(error.message);
     } else {
-      alert('Prijava uspješna!');
-      navigate('/Pocetna'); // Navigacija na UserPage
+      navigate('/Pocetna'); // Navigacija na početnu stranicu
     }
   };
 

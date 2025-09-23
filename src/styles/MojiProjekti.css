@@ -1,40 +1,50 @@
 /* Reverted styling to original state */
 .moji-projekti-container {
- 
-  padding-top: 100px;
+  /* make background cover entire viewport */
+  min-height: 100vh;
+  width: 100%;
+  padding-top: 100px; /* keep space for navbar */
   text-align: center;
-  background: linear-gradient(135deg, #f9f9f9, #e0e0e0);
-  border-radius: 12px;
-  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.15);
-  position: relative;
-  z-index: 0;
-  height: 89vh;
-  background-image: linear-gradient(rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3)), url('../images/MojiProjekti.jpg');
+  /* full-bleed background: gradient over the image */
+  background-image: linear-gradient(rgba(255,255,255,0.28), rgba(255,255,255,0.28)), url('../images/MojiProjekti.jpg');
   background-size: cover;
   background-position: center;
+  background-attachment: fixed;
+  /* remove rounded corners and large shadow so background is full-screen */
+  border-radius: 0;
+  box-shadow: none;
+  position: relative;
+  z-index: 0;
 }
 
 
 
 .projekti-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 25px;
-  margin-top: 50px;
+  /* grid occupies 80% of viewport and is centered */
+  width: 80vw;
+  max-width: 1100px;
+  margin: 36px auto 0;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
 }
 
 /* Updated styling for .projekt-card to make it minimalist and visually appealing */
 .projekt-card {
-  
   background: #ffffff;
   border-radius: 8px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  padding: 20px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+  padding: 14px;
   text-align: left;
   width: 100%;
-  max-width: 300px;
-  margin:  auto;
-  transition: transform 0.2s, box-shadow 0.2s;
+  max-width: none;
+  margin: 0;
+  transition: transform 0.14s, box-shadow 0.14s;
+  position: relative;
+  box-sizing: border-box;
+  display:flex;
+  flex-direction:column;
+  min-height:120px;
 }
 
 .projekt-card:hover {
@@ -43,8 +53,8 @@
 }
 
 .projekt-card h2 {
-  font-size: 1.4rem;
-  margin-bottom: 10px;
+  font-size: 1.05rem;
+  margin-bottom: 8px;
   color: #333333;
 }
 
@@ -54,20 +64,30 @@
   color: #666666;
 }
 
+.projekt-desc{ max-height: 3.6em; overflow: hidden; color: #505050; margin: 6px 0; line-height:1.2; }
+
 .delete-button {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  background: transparent;
+  top: 8px;
+  right: 8px;
+  background: #d32f2f;
   border: none;
-  color: #d32f2f;
-  font-size: 1.4rem;
+  color: #fff;
+  font-size: 10px;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border-radius: 50%;
   cursor: pointer;
-  transition: color 0.3s;
+  transition: background 0.14s, transform 0.12s;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
 }
 
 .delete-button:hover {
-  color: #b71c1c;
+  background: #b71c1c;
+  transform: translateY(-1px);
 }
 
 .prijave-container {

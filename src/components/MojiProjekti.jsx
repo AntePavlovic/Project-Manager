@@ -198,7 +198,7 @@ const MojiProjekti = ({ userRole, profesorId }) => {
               onClick={() => handleOpenProjekt(projekt)}
               style={{ cursor: 'pointer' }}
             >
-              <button className="delete-button" onClick={() => handleDeleteProjekt(projekt.id)}>✕</button>
+              <button className="delete-button" onClick={(e) => { e.stopPropagation(); handleDeleteProjekt(projekt.id); }}>✕</button>
               <h2>{projekt.naslov}</h2>
               <p>{projekt.opis}</p>
               <p><strong>Max broj studenata:</strong> {projekt.max_broj_studenata}</p>
