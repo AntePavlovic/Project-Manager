@@ -29,6 +29,24 @@
   text-align:left;
 }
 
+.pocetna-header{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  justify-content: flex-start;
+}
+
+.pocetna-hero-logo{
+  height:280px; /* increased logo height */
+  max-height:320px;
+  width: auto;
+  object-fit: contain; /* ensure proper scaling */
+  border-radius:6px;
+  margin-left: -24px; /* nudge logo leftwards */
+}
+
+.pocetna-hero-text{ display:block; }
+
 .pocetna-title{
   font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
   font-size: 2.1rem;
@@ -82,4 +100,6 @@
   .pocetna-inner{ grid-template-columns: 1fr; }
   .pocetna-side{ order: -1; }
   .pocetna-title{ font-size:1.6rem; }
+  .pocetna-header{ flex-direction: column; align-items: flex-start; gap:12px; }
+  .pocetna-hero-logo{ height:120px; max-height:140px; }
 }

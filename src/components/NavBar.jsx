@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import '../styles/NavBar.css'; // Dodano povezivanje CSS datoteke
+import logo from '../images/Logo.png';
 
 const NavBar = ({ userRole }) => {
   const [active, setActive] = useState('odabir-teme');
@@ -67,11 +68,7 @@ const NavBar = ({ userRole }) => {
   return (
     <nav className="custom-navbar">
       <a href="#" className="navbar-brand">
-        <img
-          src="https://eucenje.sum.ba/moodle/pluginfile.php/1/core_admin/logocompact/300x300/1746443490/Logo%20sumarum.png"
-          className="logo"
-          alt="SUMARUM"
-        />
+        <img src={logo} className="logo" alt="SUMARUM" />
       </a>
       <ul className="nav" ref={navRef}>
         <li>

@@ -14,6 +14,8 @@
     padding: 0 16px;
     box-sizing: border-box;
     overflow-x: auto;
+    overflow-y: hidden; /* prevent vertical scrollbar */
+    cursor: default; /* ensure navbar uses normal arrow cursor */
   }
   
   .custom-navbar .navbar-brand {
@@ -24,8 +26,10 @@
   }
   
   .custom-navbar .logo {
-    height: 40px;
+    height: 80%; /* 80% of navbar height */
+    max-height: 100px; /* safeguard for taller navbars */
     margin-right: 10px;
+    object-fit: contain;
   }
   
   .custom-navbar .nav {
@@ -55,6 +59,7 @@
     box-sizing: border-box;
     background: transparent;
     white-space: nowrap;
+    cursor: pointer; /* links should show pointer */
   }
   
   .custom-navbar .nav-link.active {
@@ -94,6 +99,7 @@
   .custom-navbar .login a:hover {
     background: #1976d2;
     color: #222;
+    cursor: pointer;
   }
   
   .custom-navbar .nav-highlight {

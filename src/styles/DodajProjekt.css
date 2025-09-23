@@ -8,6 +8,8 @@
   background-image: url('../images/DodajProjekt.jpg');
   background-size: cover;
   background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed; /* Fix the background so it doesn't scroll with content */
   position: relative; /* Added position relative to contain the absolute positioned overlay */
 }
 
@@ -103,4 +105,11 @@
 .form-section button:hover {
   background-color: #1251a3;
   box-shadow: 0 6px 16px rgba(25, 118, 210, 0.3);
+}
+
+/* Disable fixed background on small screens to avoid performance issues on mobile */
+@media (max-width: 768px) {
+  .dodaj-projekt-container {
+    background-attachment: scroll;
+  }
 }

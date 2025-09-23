@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import NavBar from './NavBar';
 import '../styles/Pocetna.css';
 import { supabase } from '../supabaseClient';
+import logo from '../images/Logo.png';
 
 const Pocetna = ({ userRole }) => {
   const [activeCount, setActiveCount] = useState(null);
@@ -46,30 +47,17 @@ const Pocetna = ({ userRole }) => {
       <section className="pocetna-hero">
         <div className="pocetna-inner">
           <div className="pocetna-main">
-            <h1 className="pocetna-title">Dobrodošli na SUMARUM</h1>
-            <p className="pocetna-subtitle">
-              Fakultet za studije i projekte - mjesto gdje studenti i profesori zajednički rade na praktičnim istraživanjima i projektima koji unapređuju struku.
-            </p>
-
-            <div className="pocetna-cta">
-              {userRole === 'profesor' && (
-                <>
-                  <button className="pocetna-btn" onClick={() => window.location.href = '/DodajProjekt'}>Dodaj novu temu</button>
-                  <button className="pocetna-btn secondary" onClick={() => window.location.href = '/MojiProjekti'}>Moji projekti</button>
-                </>
-              )}
-
-              {userRole === 'student' && (
-                <>
-                  <button className="pocetna-btn" onClick={() => window.location.href = '/PregledProfesora'}>Pogledaj profesore</button>
-                  <button className="pocetna-btn secondary" onClick={() => window.location.href = '/PrijavljeniProjekti'}>Prijavljeni projekti</button>
-                </>
-              )}
-
-              {!userRole && (
-                <button className="pocetna-btn secondary" onClick={() => window.location.href = '/PrijavljeniProjekti'}>Prijavljeni projekti</button>
-              )}
+            <div className="pocetna-header">
+              <img src={logo} alt="SUMARUM" className="pocetna-hero-logo" />
+              <div className="pocetna-hero-text">
+                <h1 className="pocetna-title">Dobrodošli na Projekt Manager</h1>
+                <p className="pocetna-subtitle">
+                  Mjesto gdje studenti i profesori zajednički rade na praktičnim istraživanjima i projektima koji unapređuju struku.
+                </p>
+              </div>
             </div>
+
+           
           </div>
 
           <aside className="pocetna-side">

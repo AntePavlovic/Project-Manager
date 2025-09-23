@@ -309,20 +309,22 @@ const PrijavljeniProjekti = ({ studentId }) => {
                 )}
                 <p><strong>Status:</strong> {prijava.status}</p>
                 <p><strong>Datum prijave:</strong> {new Date(prijava.datum_prijave).toLocaleDateString()}</p>
-                <button
-                  className="cancel-button"
-                  onClick={() => handleCancelPrijava(prijava.id)}
-                >
-                  Poništi Prijavu
-                </button>
-                {prijava.status === 'accepted' && !prijava.zakljucan && (
+                <div className="buttons-row">
                   <button
-                    className="start-button"
-                    onClick={() => handleStartWork(prijava.id)}
+                    className="cancel-button"
+                    onClick={() => handleCancelPrijava(prijava.id)}
                   >
-                    Započni rad
+                    Poništi prijavu
                   </button>
-                )}
+                  {prijava.status === 'accepted' && !prijava.zakljucan && (
+                    <button
+                      className="start-button btn-primary"
+                      onClick={() => handleStartWork(prijava.id)}
+                    >
+                      Započni rad
+                    </button>
+                  )}
+                </div>
                 {prijava.zakljucan && (
                   <p style={{ color: 'green', fontWeight: 'bold' }}>Zaključano - započeli ste rad na ovoj temi</p>
                 )}
