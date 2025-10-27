@@ -2,8 +2,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  height: 100vh;
+  min-height: 100vh; /* koristi min-height umjesto height */
   text-align: center;
   background-image: url('../images/DodajProjekt.jpg');
   background-size: cover;

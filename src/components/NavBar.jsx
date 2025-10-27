@@ -67,9 +67,9 @@ const NavBar = ({ userRole }) => {
 
   return (
     <nav className="custom-navbar">
-      <a href="#" className="navbar-brand">
-        <img src={logo} className="logo" alt="SUMARUM" />
-      </a>
+      <div className="navbar-brand">
+        <img src={logo} className="logo" alt="PM" />
+      </div>
       <ul className="nav" ref={navRef}>
         <li>
           <a

@@ -209,7 +209,10 @@ const OdabirProjekta = ({ studentId }) => {
                   {projekt.profesori?.prezime}
                 </p>
                 <p>
-                  <strong>Tip teme:</strong> {projekt.tip_teme || 'N/A'}
+                  <strong>Tip teme:</strong>{" "}
+                  {projekt.tip_teme
+                    ? projekt.tip_teme.charAt(0).toUpperCase() + projekt.tip_teme.slice(1)
+                    : "N/A"}
                 </p>
                 {projekt.datoteka_url && (
                   <p>

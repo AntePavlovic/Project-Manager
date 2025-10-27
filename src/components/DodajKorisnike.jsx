@@ -56,6 +56,7 @@ const DodajKorisnike = ({ userRole }) => {
     const { data, error } = await supabase.auth.admin.createUser({
       email: studentData.email,
       password: studentData.password,
+      email_confirm: true, // <-- automatski potvrđuje email
     });
 
     if (error) {
@@ -103,6 +104,7 @@ const DodajKorisnike = ({ userRole }) => {
     const { data, error } = await supabase.auth.admin.createUser({
       email: professorData.email,
       password: professorData.password,
+      email_confirm: true, // <-- automatski potvrđuje email
     });
 
     if (error) {
